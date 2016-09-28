@@ -13,12 +13,7 @@ test = pd.read_csv(test_url)
 print(train.head())
 print(test.head())
 
-# Create the column Child and assign to 'NaN'
-train["Child"] = float('NaN')
-
-# Assign 1 to passengers under 18, 0 to those 18 or older. Print the new column.
-train["Child"][train["Age"] < 18] = 1
-train["Child"][train["Age"] >= 18] = 0
+train["Age"] = train["Age"].fillna(train["Age"].median())
 
 train["Sex"][train["Sex"] == "male"] = 0
 train["Sex"][train["Sex"] == "female"] = 1
@@ -39,6 +34,9 @@ print(my_tree_one.score(features_one, target))
 
 # Impute the missing value with the median
 test.Fare[152] = test.Fare.median()
+test["Age"] = test["Age"].fillna(test["Age"].median())
+test["Sex"][test["Sex"] == "male"] = 0
+test["Sex"][test["Sex"] == "female"] = 1
 
 # Extract the features from the test set: Pclass, Sex, Age, and Fare.
 test_features = test[["Pclass", "Sex", "Age", "Fare"]].values
