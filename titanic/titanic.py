@@ -43,16 +43,15 @@ test_features = test[["Pclass", "Sex", "Age", "Fare"]].values
 
 # Make your prediction using the test set and print them.
 my_prediction = my_tree_one.predict(test_features)
-print(my_prediction)
 
 # Create a data frame with two columns: PassengerId & Survived.
 # Survived contains your predictions
 PassengerId = np.array(test["PassengerId"]).astype(int)
 my_solution = pd.DataFrame(my_prediction, PassengerId, columns=["Survived"])
-print(my_solution)
+
 
 # Check that your data frame has 418 entries
-print(my_solution.shape)
+
 
 # Write your solution to a csv file with the name my_solution.csv
 my_solution.to_csv("my_solution_one.csv", index_label=["PassengerId"])
@@ -69,3 +68,17 @@ my_tree_two = my_tree_two.fit(features_two, target)
 
 #Print the score of the new decison tree
 print(my_tree_two.score(features_two, target))
+
+# Create train_two with the newly defined feature
+train_two = train.copy()
+train_two["family_size"] = train["SibSp"] + train["Parch"] + 1
+
+# Create a new feature set and add the new feature
+features_three = train_two[["Pclass", "Sex", "Age", "Fare", "SibSp", "Parch", "family_size"]].values
+
+# Define the tree classifier, then fit the model
+my_tree_three = tree.DecisionTreeClassifier()
+my_tree_three = my_tree_three.fit(features_three, target)
+
+# Print the score of this decision tree
+print(my_tree_three.score(features_three, target))
