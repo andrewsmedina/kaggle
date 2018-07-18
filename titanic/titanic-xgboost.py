@@ -3,16 +3,11 @@ import numpy as np
 
 from sklearn import tree
 
-# train_url = "http://s3.amazonaws.com/assets.datacamp.com/course/Kaggle/train.csv"
-# train = pd.read_csv(train_url)
 train = pd.read_csv("train.csv")
 
-# test_url = "http://s3.amazonaws.com/assets.datacamp.com/course/Kaggle/test.csv"
-# test = pd.read_csv(test_url)
 test = pd.read_csv("test.csv")
 
 # Print the `head` of the train and test dataframes
-import pdb; pdb.set_trace()
 print(train.head())
 print(test.head())
 
@@ -30,10 +25,10 @@ train["Embarked"][train["Embarked"] == "Q"] = 2
 target = train["Survived"].values
 features_one = train[["Pclass", "Sex", "Age", "Fare"]].values
 
-my_tree_one = tree.DecisionTreeClassifier()
-my_tree_one = my_tree_one.fit(features_one, target)
+# my_tree_one = tree.DecisionTreeClassifier()
+# my_tree_one = my_tree_one.fit(features_one, target)
 
-print(my_tree_one.score(features_one, target))
+# print(my_tree_one.score(features_one, target))
 
 # Impute the missing value with the median
 test.Fare[152] = test.Fare.median()
@@ -42,10 +37,10 @@ test["Sex"][test["Sex"] == "male"] = 0
 test["Sex"][test["Sex"] == "female"] = 1
 
 # Extract the features from the test set: Pclass, Sex, Age, and Fare.
-test_features = test[["Pclass", "Sex", "Age", "Fare"]].values
+# test_features = test[["Pclass", "Sex", "Age", "Fare"]].values
 
 # Make your prediction using the test set and print them.
-my_prediction = my_tree_one.predict(test_features)
+# my_prediction = my_tree_one.predict(test_features)
 
 # Create a data frame with two columns: PassengerId & Survived.
 # Survived contains your predictions
