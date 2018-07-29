@@ -2,7 +2,7 @@ from __future__ import print_function
 import keras
 from keras.datasets import mnist
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Dense, Dropout, Flatten, Reshape
 from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
 
@@ -38,20 +38,25 @@ y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 
 model = Sequential()
-model.add(Conv2D(32, kernel_size=(3, 3),
-                 activation='relu',
-                 input_shape=input_shape))
-model.add(Conv2D(64, (3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(32, (3, 3), padding='same', activation='relu', input_shape=input_shape))
+model.add(Conv2D(32, (3, 3), activation='relu', padding='same'))
+model.add(MaxPooling2D(pool_size=(2, 2), data_format="channels_first"))
+model.add(Conv2D(32, (3, 3), padding='same', activation='relu'))
+model.add(Conv2D(32, (3, 3), padding='same', activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2), data_format="channels_first"))
+model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
+model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2), data_format="channels_first"))
 model.add(Dropout(0.25))
 model.add(Flatten())
-model.add(Dense(128, activation='relu'))
+model.add(Dense(output_dim=256, activation='relu'))
 model.add(Dropout(0.5))
-model.add(Dense(num_classes, activation='softmax'))
+model.add(Dense(output_dim=256, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(output_dim=10, activation='softmax'))
 
-model.compile(loss=keras.losses.categorical_crossentropy,
-              optimizer=keras.optimizers.Adadelta(),
-              metrics=['accuracy'])
+adam = keras.optimizers.Adam(lr=0.0005, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=['accuracy'])
 
 model.fit(x_train, y_train,
           batch_size=batch_size,
@@ -59,4 +64,4 @@ model.fit(x_train, y_train,
           verbose=1,
           validation_data=(x_test, y_test))
 
-model.save('my_model.h5')
+model.save('my_model2.h5')

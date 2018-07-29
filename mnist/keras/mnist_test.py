@@ -14,7 +14,7 @@ test = test.values.reshape(test.values.shape[0], img_rows, img_cols, 1)
 test = test.astype('float32')
 test /= 255
 
-model = load_model("my_model.h5")
+model = load_model("my_model2.h5")
 results = model.predict(test, batch_size, verbose=0)
 
 results = np.argmax(results,axis = 1)
